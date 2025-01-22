@@ -37,15 +37,15 @@ function insertFormCurrencies(currencies, currenciesFullNames) {
     });
 }
 
-function insertTableCurrencies(currencies, currenciesFullNames) {
+function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
     Object.keys(currencies.rates).forEach((currencyId) => {
         $(".table-currencies").append(
             `<tr>
-                    <th>${currencies.amount}</th>
+                    <th>${amount}</th>
                     <th>${currenciesFullNames[currencies.base]}</th>
                     <td>${currenciesFullNames[currencyId]}</td>
                     <td>${currencyId}</td>
-                    <td>${currencies.rates[currencyId]}</td>
+                    <td>${Number(currencies.rates[currencyId] * amount).toFixed(2)}</td>
              </tr>`
         );
     });
@@ -70,11 +70,13 @@ async function handleInputs(eventObject) {
     eventObject.preventDefault();
     const $baseCurrency = $(".currencies").val();
     const $date = $("#date").val();
+    const $amount = $("#amount").val();
     console.log("me hiciste click", $baseCurrency);
     console.log("date", $date);
+    console.log($amount);
     currencies = await getCurrencies($baseCurrency, $date);
     removeTableChildren();
-    insertTableCurrencies(currencies, currenciesFullNames);
+    insertTableCurrencies(currencies, currenciesFullNames, $amount);
 }
 
 function removeTableChildren() {
