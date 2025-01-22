@@ -1,34 +1,32 @@
 {
-  "name": "casa-de-cambio",
-  "version": "1.0.0",
-  "description": "casa de cambio consumiendo API para clase 12 de r/ArgentinaPrograma",
-  "main": "index.js",
-  "scripts": {
-    "start": "http-server",
-    "cypress-run": "cypress run",
-    "cypress-dev": "cypress open",
-    "test": "run-p start cypress-run",
-    "test-dev": "run-p start cypress-dev"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kund097/casa-de-cambio.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Kund097/casa-de-cambio/issues"
-  },
-  "homepage": "https://github.com/Kund097/casa-de-cambio#readme",
-  "dependencies": {
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
-    "casa-de-cambio": "file:",
-    "jquery": "^3.7.1"
-  },
-  "devDependencies": {
-    "@types/jquery": "^3.5.29",
-    "cypress": "^13.6.6",
-    "http-server": "^14.1.1"
-  }
+    "name": "casa-de-cambio",
+    "version": "1.0.0",
+    "description": "casa de cambio consumiendo API para clase 12 de r/ArgentinaPrograma",
+    "main": "index.js",
+    "scripts": {
+        "start": "http-server",
+        "cypress-run": "cypress run",
+        "cypress-dev": "cypress open"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Kund097/casa-de-cambio.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Kund097/casa-de-cambio/issues"
+    },
+    "homepage": "https://github.com/Kund097/casa-de-cambio#readme",
+    "dependencies": {
+        "bootstrap": "^5.3.3",
+        "bootstrap-icons": "^1.11.3",
+        "casa-de-cambio": "file:",
+        "jquery": "^3.7.1"
+    },
+    "devDependencies": {
+        "@types/jquery": "^3.5.29",
+        "cypress": "^13.17.0",
+        "http-server": "^14.1.1"
+    }
 }
