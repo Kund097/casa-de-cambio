@@ -41,11 +41,11 @@ function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
     Object.keys(currencies.rates).forEach((currencyId) => {
         $(".table-currencies").append(
             `<tr>
+            <th>${currenciesFullNames[currencies.base]}</th>
                     <th>${amount}</th>
-                    <th>${currenciesFullNames[currencies.base]}</th>
+                    <td>${Number(currencies.rates[currencyId] * amount).toFixed(2)}</td>
                     <td>${currenciesFullNames[currencyId]}</td>
                     <td>${currencyId}</td>
-                    <td>${Number(currencies.rates[currencyId] * amount).toFixed(2)}</td>
              </tr>`
         );
     });
