@@ -6,7 +6,7 @@
     "scripts": {
         "start": "http-server",
         "cypress-run": "cypress run",
-        "cypress-dev": "cypress open"
+        "cypress-dev": "npx cypress open"
     },
     "repository": {
         "type": "git",
