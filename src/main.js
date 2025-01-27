@@ -17,8 +17,6 @@ $(window).on("load", async () => {
             console.error("error", error.status);
         },
     });
-    console.log("cargué");
-    console.log(currencies, currenciesFullNames);
     insertFormCurrencies(currencies, currenciesFullNames);
     insertTableCurrencies(currencies, currenciesFullNames);
 });
@@ -29,7 +27,6 @@ function insertFormCurrencies(currencies, currenciesFullNames) {
         .val(currencies.base);
     $("#date").val(currencies.date);
     const $listCurrencies = $(".currencies");
-    console.log(currencies);
     Object.keys(currencies.rates).forEach((currency) => {
         $listCurrencies.append(
             `<option id="${currency}" value="${currency}">${currenciesFullNames[currency]}</option>`
@@ -43,7 +40,9 @@ function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
             `<tr>
             <th>${currenciesFullNames[currencies.base]}</th>
                     <th>${amount}</th>
-                    <td>${Number(currencies.rates[currencyId] * amount).toFixed(2)}</td>
+                    <td data-cy='rates'>${Number(
+                        currencies.rates[currencyId] * amount
+                    ).toFixed(2)}</td>
                     <td>${currenciesFullNames[currencyId]}</td>
                     <td>${currencyId}</td>
              </tr>`
@@ -52,13 +51,11 @@ function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
 }
 
 async function getCurrencies(currency = "EUR", date = "latest") {
-    console.log({ date });
     return await $.ajax({
         method: "GET",
         url: `https://api.frankfurter.dev/v1/${date}?base=${currency}`,
         success: (response) => {
             response.json;
-            console.log(response.rates);
         },
         error: (error) => {
             console.error("error", error.status);
