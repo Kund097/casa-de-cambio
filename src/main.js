@@ -68,9 +68,6 @@ async function handleInputs(eventObject) {
     const $baseCurrency = $(".currencies").val();
     const $date = $("#date").val();
     const $amount = $("#amount").val();
-    console.log("me hiciste click", $baseCurrency);
-    console.log("date", $date);
-    console.log($amount);
     currencies = await getCurrencies($baseCurrency, $date);
     removeTableChildren();
     insertTableCurrencies(currencies, currenciesFullNames, $amount);
