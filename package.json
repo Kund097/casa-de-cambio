@@ -25,6 +25,7 @@
         "jquery": "^3.7.1"
     },
     "devDependencies": {
+        "@types/cypress": "^0.1.6",
         "@types/jquery": "^3.5.29",
         "cypress": "^13.17.0",
         "http-server": "^14.1.1"

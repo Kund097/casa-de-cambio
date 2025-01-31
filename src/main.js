@@ -39,7 +39,7 @@ function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
         $(".table-currencies").append(
             `<tr>
             <th>${currenciesFullNames[currencies.base]}</th>
-                    <th>${amount}</th>
+                    <th data-cy='amount-currency'>${amount}</th>
                     <td data-cy='rates'>${Number(
                         currencies.rates[currencyId] * amount
                     ).toFixed(2)}</td>
