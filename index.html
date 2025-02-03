@@ -13,7 +13,6 @@
         <h2 class="text-center" data-cy="exchange-house-title">Casa de Cambio</h2>
         <form>
             <h5>Moneda Base</h5>
-            <label for="currencies"></label>
             <select name="currencies" class="currencies form-select mb-3 border border-primary"
                 data-cy="currency-selected">
                 <option selected class="base-currency">Seleccione una moneda...</option>
@@ -25,7 +24,7 @@
             <input id="date" type="date" required="true" name="date" class="border border-primary">
             <button class="btn btn-primary" id="input-btn" data-cy="calculate-btn">Calcular</button>
         </form>
-        <table class="table table-striped table-hover mt-3">
+        <table class="table table-striped table-hover mt-3 border">
             <thead class="table-dark">
                 <tr>
                     <th>Base</th>
