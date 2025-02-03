@@ -2,52 +2,66 @@
 //testearlo con cypress
 
 ///<reference types = "jquery"/>
-let currencies;
-let currenciesFullNames;
+
+const currencies = {};
 $(window).on("load", async () => {
-    currencies = await getCurrencies();
-    await $.ajax({
-        method: "GET",
-        url: "https://api.frankfurter.dev/v1/currencies",
-        success: (response) => {
-            response.json;
-            currenciesFullNames = response;
-        },
-        error: (error) => {
-            console.error("error", error.status);
-        },
-    });
-    insertFormCurrencies(currencies, currenciesFullNames);
-    insertTableCurrencies(currencies, currenciesFullNames);
+    currencies.apiCurrencies = await getCurrencies();
+    currencies.fullNames = await getCurrencyFullNames();
+    insertFormCurrencies(currencies);
+    insertTableCurrencies(currencies);
 });
 
-function insertFormCurrencies(currencies, currenciesFullNames) {
+function insertFormCurrencies({ apiCurrencies, fullNames }) {
     $(".base-currency")
-        .text(currenciesFullNames[currencies.base])
-        .val(currencies.base);
-    $("#date").val(currencies.date);
+        .text(fullNames[apiCurrencies.base])
+        .val(apiCurrencies.base);
+    $("#date").val(apiCurrencies.date);
     const $listCurrencies = $(".currencies");
-    Object.keys(currencies.rates).forEach((currency) => {
+    Object.keys(apiCurrencies.rates).forEach((currency) => {
         $listCurrencies.append(
-            `<option id="${currency}" value="${currency}">${currenciesFullNames[currency]}</option>`
+            `<option id="${currency}" value="${currency}">${fullNames[currency]}</option>`
         );
     });
 }
 
-function insertTableCurrencies(currencies, currenciesFullNames, amount = 1) {
-    Object.keys(currencies.rates).forEach((currencyId) => {
+function insertTableCurrencies({ apiCurrencies, fullNames }, amount = 1) {
+    Object.keys(apiCurrencies.rates).forEach((currencyId) => {
         $(".table-currencies").append(
             `<tr>
-            <th>${currenciesFullNames[currencies.base]}</th>
-                    <th data-cy='amount-currency'>${amount}</th>
-                    <td data-cy='rates'>${Number(
-                        currencies.rates[currencyId] * amount
+                    <th class='base-table'>${fullNames[apiCurrencies.base]}</th>
+                    <th data-cy='amount-currency' class='amount-table'>${amount}</th>
+                    <td data-cy='rates' class='rates-table'>${Number(
+                        apiCurrencies.rates[currencyId] * amount
                     ).toFixed(2)}</td>
-                    <td>${currenciesFullNames[currencyId]}</td>
-                    <td>${currencyId}</td>
+                    <td class='full-name-table'>${fullNames[currencyId]}</td>
+                    <td class='currency-id-table'>${currencyId}</td>
              </tr>`
         );
     });
+}
+
+function updateTableCurrencies({ apiCurrencies, fullNames }, amount) {
+    const CURRENCIES_KEYS = Object.keys(apiCurrencies.rates);
+    $(".table-currencies tr").each(function (index) {
+        const CURRENCY_ID = CURRENCIES_KEYS[index];
+        const $ROW = $(this);
+        const CONVERTED_RATE = Number(apiCurrencies.rates[CURRENCY_ID] * amount);
+        $ROW.find(".base-table").text(fullNames[apiCurrencies.base]);
+        $ROW.find(".amount-table").text(amount);
+        $ROW.find(".rates-table").text(CONVERTED_RATE.toFixed(2));
+        $ROW.find(".full-name-table").text(fullNames[CURRENCY_ID]);
+        $ROW.find(".currency-id-table").text(CURRENCY_ID);
+    });
+}
+
+async function handleInputs(eventObject) {
+    eventObject.preventDefault();
+    const { $baseCurrency, $date, $amount } = getInputValues();
+    const newCurrencies = {
+        ...currencies,
+        apiCurrencies: await getCurrencies($baseCurrency, $date),
+    };
+    updateTableCurrencies(newCurrencies, $amount);
 }
 
 async function getCurrencies(currency = "EUR", date = "latest") {
@@ -63,14 +77,24 @@ async function getCurrencies(currency = "EUR", date = "latest") {
     });
 }
 
-async function handleInputs(eventObject) {
-    eventObject.preventDefault();
+async function getCurrencyFullNames() {
+    return await $.ajax({
+        method: "GET",
+        url: "https://api.frankfurter.dev/v1/currencies",
+        success: (response) => {
+            response.json;
+        },
+        error: (error) => {
+            console.error("error", error.status);
+        },
+    });
+}
+
+function getInputValues() {
     const $baseCurrency = $(".currencies").val();
     const $date = $("#date").val();
-    const $amount = $("#amount").val();
-    currencies = await getCurrencies($baseCurrency, $date);
-    removeTableChildren();
-    insertTableCurrencies(currencies, currenciesFullNames, $amount);
+    const $amount = Number($("#amount").val());
+    return { $baseCurrency, $date, $amount };
 }
 
 function removeTableChildren() {
