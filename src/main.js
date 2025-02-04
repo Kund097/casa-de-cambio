@@ -45,7 +45,9 @@ function updateTableCurrencies({ apiCurrencies, fullNames }, amount) {
     $(".table-currencies tr").each(function (index) {
         const CURRENCY_ID = CURRENCIES_KEYS[index];
         const $ROW = $(this);
-        const CONVERTED_RATE = Number(apiCurrencies.rates[CURRENCY_ID] * amount);
+        const CONVERTED_RATE = Number(
+            apiCurrencies.rates[CURRENCY_ID] * amount
+        );
         $ROW.find(".base-table").text(fullNames[apiCurrencies.base]);
         $ROW.find(".amount-table").text(amount);
         $ROW.find(".rates-table").text(CONVERTED_RATE.toFixed(2));
@@ -64,8 +66,8 @@ async function handleInputs(eventObject) {
     updateTableCurrencies(newCurrencies, $amount);
 }
 
-async function getCurrencies(currency = "EUR", date = "latest") {
-    return await $.ajax({
+function getCurrencies(currency = "EUR", date = "latest") {
+    return $.ajax({
         method: "GET",
         url: `https://api.frankfurter.dev/v1/${date}?base=${currency}`,
         success: (response) => {
@@ -77,8 +79,8 @@ async function getCurrencies(currency = "EUR", date = "latest") {
     });
 }
 
-async function getCurrencyFullNames() {
-    return await $.ajax({
+function getCurrencyFullNames() {
+    return $.ajax({
         method: "GET",
         url: "https://api.frankfurter.dev/v1/currencies",
         success: (response) => {
