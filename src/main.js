@@ -3,12 +3,16 @@
 
 ///<reference types = "jquery"/>
 
-const currencies = {};
-$(window).on("load", async () => {
-    currencies.apiCurrencies = await getCurrencies();
-    currencies.fullNames = await getCurrencyFullNames();
-    insertFormCurrencies(currencies);
-    insertTableCurrencies(currencies);
+$(window).on("load", () => {
+    const currencies = {};
+    Promise.all([getCurrencies(), getCurrencyFullNames()])
+        .then(([apiCurrencies, fullNames]) => {
+            currencies.apiCurrencies = apiCurrencies;
+            currencies.fullNames = fullNames;
+            insertFormCurrencies(currencies);
+            insertTableCurrencies(currencies);
+        })
+        .catch((error) => console.error("error", error));
 });
 
 function insertFormCurrencies({ apiCurrencies, fullNames }) {
@@ -56,14 +60,19 @@ function updateTableCurrencies({ apiCurrencies, fullNames }, amount) {
     });
 }
 
-async function handleInputs(eventObject) {
+function handleInputs(eventObject) {
     eventObject.preventDefault();
     const { $baseCurrency, $date, $amount } = getInputValues();
-    const newCurrencies = {
-        ...currencies,
-        apiCurrencies: await getCurrencies($baseCurrency, $date),
-    };
-    updateTableCurrencies(newCurrencies, $amount);
+    const newCurrencies = {};
+    Promise.all([getCurrencies($baseCurrency, $date), getCurrencyFullNames()])
+        .then(([apiCurrencies, fullNames]) => {
+            newCurrencies.apiCurrencies = apiCurrencies;
+            newCurrencies.fullNames = fullNames;
+            updateTableCurrencies(newCurrencies, $amount);
+        })
+        .catch((error) => {
+            console.error("error", error);
+        });
 }
 
 function getCurrencies(currency = "EUR", date = "latest") {
@@ -99,9 +108,9 @@ function getInputValues() {
     return { $baseCurrency, $date, $amount };
 }
 
-function removeTableChildren() {
-    $(".table-currencies").children().remove();
-}
+// function removeTableChildren() {
+//     $(".table-currencies").children().remove();
+// }
 
 const $inputBtn = $("#input-btn");
 $inputBtn.on("click", handleInputs);
